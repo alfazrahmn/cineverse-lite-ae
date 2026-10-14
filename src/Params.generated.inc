@@ -1,0 +1,15 @@
+    AEFX_CLR_STRUCT(def); PF_ADD_POPUP("Input Profile", 15, 1, "Select Input Profile|Rec.709 - Gamma 2.4|DaVinci Wide Gamut - DaVinci Intermediate|ACEScct - AP1|ARRI Wide Gamut 3 - LogC3 EI800|ARRI Wide Gamut 4 - LogC4|Sony S-Gamut3.Cine - S-Log3|Sony S-Gamut3 - S-Log3|REDWideGamutRGB - Log3G10|Panasonic V-Gamut - V-Log|Blackmagic Wide Gamut - Film Gen 5|Canon Cinema Gamut - Canon Log 2|Canon Cinema Gamut - Canon Log 3|Fujifilm F-Gamut - F-Log2|Apple Wide Gamut - Apple Log 2", 1);
+    AEFX_CLR_STRUCT(def); PF_ADD_POPUP("Output Profile", 2, 1, "Rec.709 - Gamma 2.4|Rec.709 - Gamma 2.2", 2);
+    PF_ADD_FLOAT_SLIDERX("Exposure", -6.00000000f, 6.00000000f, -6.00000000f, 6.00000000f, 0.00000000f, PF_Precision_THOUSANDTHS, 0, 0, 3);
+    PF_ADD_FLOAT_SLIDERX("Contrast", -0.50000000f, 1.00000000f, -0.50000000f, 1.00000000f, 0.00000000f, PF_Precision_TEN_THOUSANDTHS, 0, 0, 4);
+    PF_ADD_FLOAT_SLIDERX("Pivot", 0.00000000f, 1.00000000f, 0.00000000f, 1.00000000f, 0.33604330f, PF_Precision_TEN_THOUSANDTHS, 0, 0, 5);
+    PF_ADD_FLOAT_SLIDERX("Temperature", -80.00000000f, 80.00000000f, -80.00000000f, 80.00000000f, 0.00000000f, PF_Precision_THOUSANDTHS, 0, 0, 6);
+    PF_ADD_FLOAT_SLIDERX("Tint", -100.00000000f, 100.00000000f, -100.00000000f, 100.00000000f, 0.00000000f, PF_Precision_THOUSANDTHS, 0, 0, 7);
+    PF_ADD_FLOAT_SLIDERX("Saturation", 0.00000000f, 2.00000000f, 0.00000000f, 2.00000000f, 1.00000000f, PF_Precision_THOUSANDTHS, 0, 0, 8);
+    PF_ADD_FLOAT_SLIDERX("Film Saturation", 0.00000000f, 2.00000000f, 0.00000000f, 2.00000000f, 1.00000000f, PF_Precision_THOUSANDTHS, 0, 0, 9);
+    AEFX_CLR_STRUCT(def); PF_ADD_POPUP("Negative Stock", 2, 1, "Select Negative Stock|Kodak Vision 3", 10);
+    PF_ADD_FLOAT_SLIDERX("Negative Strength", 0.00000000f, 1.00000000f, 0.00000000f, 1.00000000f, 0.50000000f, PF_Precision_THOUSANDTHS, 0, 0, 11);
+    AEFX_CLR_STRUCT(def); PF_ADD_POPUP("Print Stock", 2, 1, "Select Print Stock|Kodak 2382", 12);
+    PF_ADD_FLOAT_SLIDERX("Positive Strength", 0.00000000f, 1.00000000f, 0.00000000f, 1.00000000f, 0.50000000f, PF_Precision_THOUSANDTHS, 0, 0, 13);
+    PF_ADD_CHECKBOXX("Grain", 0, 0, 14);
+    PF_ADD_FLOAT_SLIDERX("Grain Amount", 0.00000000f, 2.00000000f, 0.00000000f, 2.00000000f, 0.35000000f, PF_Precision_THOUSANDTHS, 0, 0, 15);

@@ -1,0 +1,15 @@
+{
+  "scope": "Offline CPU execution of CUDA pixel body only",
+  "passed": 5,
+  "failed": 0,
+  "checks": [
+    "BGRA channel order",
+    "Independent byte pitches",
+    "Cropped buffer origins",
+    "Alpha association and hidden RGB",
+    "Full-resolution coordinates with preview scaling"
+  ],
+  "cuda_compiled": false,
+  "gpu_executed": false,
+  "results": "PASSED 5 offline CUDA-body mapping cases; no CUDA compiler or GPU execution."
+}

@@ -1,0 +1,12 @@
+{
+  "source_sha256": "afa9ae05e88468a7db5cf6bc3ba054e9978bedd5456997325b6e23720947720a",
+  "source_version": "Cineverse Lite v1.1 Compact",
+  "stock_math": "Retained compact negative approximation and original 65-knot print curves",
+  "changes": [
+    "Native parameter block replaces DCTL UI globals",
+    "Per-frame exposure gain and white-balance whites",
+    "Floating-point grain coordinates for preview scaling",
+    "Profile dispatch and neutral-state decisions prepared once per frame"
+  ],
+  "constant_bytes": 63776
+}

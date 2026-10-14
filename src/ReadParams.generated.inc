@@ -1,0 +1,15 @@
+    s.input=params[1]->u.pd.value-1;
+    s.output=params[2]->u.pd.value-1;
+    s.ev=static_cast<float>(params[3]->u.fs_d.value);
+    s.contrast=static_cast<float>(params[4]->u.fs_d.value);
+    s.pivot=static_cast<float>(params[5]->u.fs_d.value);
+    s.temp=static_cast<float>(params[6]->u.fs_d.value);
+    s.tint=static_cast<float>(params[7]->u.fs_d.value);
+    s.sat=static_cast<float>(params[8]->u.fs_d.value);
+    s.fsat=static_cast<float>(params[9]->u.fs_d.value);
+    s.neg=params[10]->u.pd.value-1;
+    s.neg_strength=static_cast<float>(params[11]->u.fs_d.value);
+    s.print=params[12]->u.pd.value-1;
+    s.print_strength=static_cast<float>(params[13]->u.fs_d.value);
+    s.grain_on=params[14]->u.bd.value ? 1 : 0;
+    s.grain_amount=static_cast<float>(params[15]->u.fs_d.value);

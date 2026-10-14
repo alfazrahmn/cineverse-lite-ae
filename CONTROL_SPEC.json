@@ -1,0 +1,166 @@
+[
+  {
+    "source_id": "cvl_input",
+    "field": "input",
+    "label": "Input Profile",
+    "kind": "DCTLUI_COMBO_BOX",
+    "default": "0",
+    "choices": [
+      "Select Input Profile",
+      "Rec.709 - Gamma 2.4",
+      "DaVinci Wide Gamut - DaVinci Intermediate",
+      "ACEScct - AP1",
+      "ARRI Wide Gamut 3 - LogC3 EI800",
+      "ARRI Wide Gamut 4 - LogC4",
+      "Sony S-Gamut3.Cine - S-Log3",
+      "Sony S-Gamut3 - S-Log3",
+      "REDWideGamutRGB - Log3G10",
+      "Panasonic V-Gamut - V-Log",
+      "Blackmagic Wide Gamut - Film Gen 5",
+      "Canon Cinema Gamut - Canon Log 2",
+      "Canon Cinema Gamut - Canon Log 3",
+      "Fujifilm F-Gamut - F-Log2",
+      "Apple Wide Gamut - Apple Log 2"
+    ]
+  },
+  {
+    "source_id": "cvl_output",
+    "field": "output",
+    "label": "Output Profile",
+    "kind": "DCTLUI_COMBO_BOX",
+    "default": "0",
+    "choices": [
+      "Rec.709 - Gamma 2.4",
+      "Rec.709 - Gamma 2.2"
+    ]
+  },
+  {
+    "source_id": "cvl_ev",
+    "field": "ev",
+    "label": "Exposure",
+    "kind": "DCTLUI_SLIDER_FLOAT",
+    "default": "0.00000000f",
+    "minimum": "-6.00000000f",
+    "maximum": "6.00000000f",
+    "step": "0.00100000f"
+  },
+  {
+    "source_id": "cvl_contrast",
+    "field": "contrast",
+    "label": "Contrast",
+    "kind": "DCTLUI_SLIDER_FLOAT",
+    "default": "0.00000000f",
+    "minimum": "-0.50000000f",
+    "maximum": "1.00000000f",
+    "step": "0.00010000f"
+  },
+  {
+    "source_id": "cvl_pivot",
+    "field": "pivot",
+    "label": "Pivot",
+    "kind": "DCTLUI_SLIDER_FLOAT",
+    "default": "0.33604330f",
+    "minimum": "0.00000000f",
+    "maximum": "1.00000000f",
+    "step": "0.00010000f"
+  },
+  {
+    "source_id": "cvl_temp",
+    "field": "temp",
+    "label": "Temperature",
+    "kind": "DCTLUI_SLIDER_FLOAT",
+    "default": "0.00000000f",
+    "minimum": "-80.00000000f",
+    "maximum": "80.00000000f",
+    "step": "0.10000000f"
+  },
+  {
+    "source_id": "cvl_tint",
+    "field": "tint",
+    "label": "Tint",
+    "kind": "DCTLUI_SLIDER_FLOAT",
+    "default": "0.00000000f",
+    "minimum": "-100.00000000f",
+    "maximum": "100.00000000f",
+    "step": "0.10000000f"
+  },
+  {
+    "source_id": "cvl_sat",
+    "field": "sat",
+    "label": "Saturation",
+    "kind": "DCTLUI_SLIDER_FLOAT",
+    "default": "1.00000000f",
+    "minimum": "0.00000000f",
+    "maximum": "2.00000000f",
+    "step": "0.01000000f"
+  },
+  {
+    "source_id": "cvl_fsat",
+    "field": "fsat",
+    "label": "Film Saturation",
+    "kind": "DCTLUI_SLIDER_FLOAT",
+    "default": "1.00000000f",
+    "minimum": "0.00000000f",
+    "maximum": "2.00000000f",
+    "step": "0.01000000f"
+  },
+  {
+    "source_id": "cvl_neg",
+    "field": "neg",
+    "label": "Negative Stock",
+    "kind": "DCTLUI_COMBO_BOX",
+    "default": "0",
+    "choices": [
+      "Select Negative Stock",
+      "Kodak Vision 3"
+    ]
+  },
+  {
+    "source_id": "cvl_neg_strength",
+    "field": "neg_strength",
+    "label": "Negative Strength",
+    "kind": "DCTLUI_SLIDER_FLOAT",
+    "default": "0.50000000f",
+    "minimum": "0.00000000f",
+    "maximum": "1.00000000f",
+    "step": "0.00100000f"
+  },
+  {
+    "source_id": "cvl_print",
+    "field": "print",
+    "label": "Print Stock",
+    "kind": "DCTLUI_COMBO_BOX",
+    "default": "0",
+    "choices": [
+      "Select Print Stock",
+      "Kodak 2382"
+    ]
+  },
+  {
+    "source_id": "cvl_print_strength",
+    "field": "print_strength",
+    "label": "Positive Strength",
+    "kind": "DCTLUI_SLIDER_FLOAT",
+    "default": "0.50000000f",
+    "minimum": "0.00000000f",
+    "maximum": "1.00000000f",
+    "step": "0.00100000f"
+  },
+  {
+    "source_id": "cvl_grain_on",
+    "field": "grain_on",
+    "label": "Grain",
+    "kind": "DCTLUI_CHECK_BOX",
+    "default": "0"
+  },
+  {
+    "source_id": "cvl_grain_amount",
+    "field": "grain_amount",
+    "label": "Grain Amount",
+    "kind": "DCTLUI_SLIDER_FLOAT",
+    "default": "0.35000000f",
+    "minimum": "0.00000000f",
+    "maximum": "2.00000000f",
+    "step": "0.01000000f"
+  }
+]

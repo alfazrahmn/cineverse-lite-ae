@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+ <ItemGroup Label="ProjectConfigurations">
+  <ProjectConfiguration Include="Release|x64"><Configuration>Release</Configuration><Platform>x64</Platform></ProjectConfiguration>
+ </ItemGroup>
+ <PropertyGroup Label="Globals"><ProjectGuid>{12E26693-604B-44A9-AB97-8C613D37A8BE}</ProjectGuid><Keyword>Win32Proj</Keyword><WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion></PropertyGroup>
+ <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+ <PropertyGroup Label="Configuration"><ConfigurationType>DynamicLibrary</ConfigurationType><UseDebugLibraries>false</UseDebugLibraries><PlatformToolset>v143</PlatformToolset><CharacterSet>Unicode</CharacterSet></PropertyGroup>
+ <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+ <PropertyGroup>
+  <SdkRoot Condition="'$(SdkRoot)'==''">$(AE_SDK_ROOT)</SdkRoot>
+  <CvlCudaEnabled Condition="'$(CvlCudaEnabled)'==''">false</CvlCudaEnabled>
+  <CvlCudaDefine>0</CvlCudaDefine><BackendName>CPU</BackendName>
+  <CvlCudaDefine Condition="'$(CvlCudaEnabled)'=='true'">1</CvlCudaDefine>
+  <BackendName Condition="'$(CvlCudaEnabled)'=='true'">CUDA</BackendName>
+  <IntDir>$(ProjectDir)..\build\$(BackendName)\</IntDir>
+  <OutDir>$(ProjectDir)..\dist\$(BackendName)\</OutDir>
+  <TargetName>Cineverse_Lite</TargetName><TargetExt>.aex</TargetExt>
+ </PropertyGroup>
+ <ItemDefinitionGroup>
+  <ClCompile>
+   <WarningLevel>Level4</WarningLevel><Optimization>MaxSpeed</Optimization><LanguageStandard>stdcpp17</LanguageStandard>
+   <FloatingPointModel>Precise</FloatingPointModel><RuntimeLibrary>MultiThreaded</RuntimeLibrary><ExceptionHandling>Sync</ExceptionHandling>
+   <PrecompiledHeader>NotUsing</PrecompiledHeader><MultiProcessorCompilation>true</MultiProcessorCompilation>
+   <PreprocessorDefinitions>WIN32;_WINDOWS;MSWindows;NOMINMAX;_CRT_SECURE_NO_WARNINGS;CVL_ENABLE_CUDA=$(CvlCudaDefine);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+   <AdditionalIncludeDirectories>$(ProjectDir)..\src;$(SdkRoot)\Examples\Headers;$(SdkRoot)\Examples\Headers\SP;$(SdkRoot)\Examples\Headers\Win;$(SdkRoot)\Examples\Util;$(CUDA_PATH)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+  </ClCompile>
+  <Link><SubSystem>Windows</SubSystem><GenerateDebugInformation>true</GenerateDebugInformation><EnableCOMDATFolding>true</EnableCOMDATFolding><OptimizeReferences>true</OptimizeReferences>
+   <AdditionalLibraryDirectories Condition="'$(CvlCudaEnabled)'=='true'">$(CUDA_PATH)\lib\x64;$(CUDA_PATH)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+   <AdditionalDependencies Condition="'$(CvlCudaEnabled)'=='true'">$(IntDir)CineverseLiteCUDA.obj;cuda.lib;cudart_static.lib;advapi32.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+  </Link>
+ </ItemDefinitionGroup>
+ <ItemGroup><ClCompile Include="..\src\CineverseLite.cpp" /><ClCompile Include="..\src\Engine.cpp" /></ItemGroup>
+ <ItemGroup>
+  <CustomBuild Include="..\src\CineverseLitePiPL.r">
+   <Command>cl /nologo /EP /TC /I "$(SdkRoot)\Examples\Headers" /I "$(ProjectDir)..\src" /D CVL_ENABLE_CUDA=$(CvlCudaDefine) "%(FullPath)" &gt; "$(IntDir)CineverseLitePiPL.rr"
+if errorlevel 1 exit /b 1
+"$(SdkRoot)\Examples\Resources\PiPLtool.exe" "$(IntDir)CineverseLitePiPL.rr" "$(IntDir)CineverseLitePiPL.rrc"
+if errorlevel 1 exit /b 1
+cl /nologo /EP /TC /D MSWindows "$(IntDir)CineverseLitePiPL.rrc" &gt; "$(IntDir)CineverseLitePiPL.rc"
+if errorlevel 1 exit /b 1</Command>
+   <Outputs>$(IntDir)CineverseLitePiPL.rc</Outputs><AdditionalInputs>..\src\PluginFlags.h;%(AdditionalInputs)</AdditionalInputs>
+   <Message>Generating Adobe PiPL resource</Message>
+  </CustomBuild>
+  <ResourceCompile Include="$(IntDir)CineverseLitePiPL.rc" />
+ </ItemGroup>
+ <Target Name="CheckSdk" BeforeTargets="PrepareForBuild">
+  <Error Condition="!Exists('$(SdkRoot)\Examples\Headers\AE_Effect.h')" Text="Set SdkRoot or AE_SDK_ROOT to the extracted native After Effects SDK root." />
+  <Error Condition="'$(CvlCudaEnabled)'=='true' And !Exists('$(CUDA_PATH)\bin\nvcc.exe')" Text="CUDA build requires a compatible CUDA 12.8 toolkit and CUDA_PATH. Start with the CPU build if it is unavailable." />
+ </Target>
+ <Target Name="BuildCudaKernel" BeforeTargets="Link" Condition="'$(CvlCudaEnabled)'=='true'"
+  Inputs="$(ProjectDir)..\src\CineverseLiteCUDA.cu;$(ProjectDir)..\src\Core.generated.hpp;$(ProjectDir)..\src\Engine.hpp;$(ProjectDir)..\src\Compat.hpp;$(ProjectDir)..\src\Settings.generated.hpp"
+  Outputs="$(IntDir)CineverseLiteCUDA.obj">
+  <Exec Command="&quot;$(CUDA_PATH)\bin\nvcc.exe&quot; -c -O3 -std=c++17 --fmad=false --ftz=false --prec-div=true --prec-sqrt=true -Xptxas=-v -Xcompiler /MT -gencode=arch=compute_61,code=sm_61 -gencode=arch=compute_75,code=sm_75 -gencode=arch=compute_86,code=sm_86 -gencode=arch=compute_89,code=sm_89 -gencode=arch=compute_75,code=compute_75 -I &quot;$(ProjectDir)..\src&quot; &quot;$(ProjectDir)..\src\CineverseLiteCUDA.cu&quot; -o &quot;$(IntDir)CineverseLiteCUDA.obj&quot;" />
+ </Target>
+ <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>

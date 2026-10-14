@@ -1,0 +1,36 @@
+CINEVERSE LITE AE 0.2 - WINDOWS CUDA TEST SOURCE
+
+The earlier downloadable build was CPU only. This project enables the existing
+CUDA implementation and prepares profile dispatch once per frame. It preserves
+the grading controls and arithmetic. Neutral GPU frames use a pitched GPU copy.
+The CUDA kernel uses 32-pixel-wide blocks. About reports the last completed
+render backend. These changes have no measured speed claim yet.
+
+1. Upload this project's updated files into your existing private GitHub repo.
+   Keep AfterEffectsSDK_26.5_win.zip in the repository root.
+2. Ensure .github/workflows/windows-cuda-build.yml exists. If your upload hides
+   .github, create that exact path with GitHub Add file / Create new file and
+   paste its included contents.
+3. Actions > Build Cineverse Lite CUDA Test > Run workflow.
+4. When green, download Cineverse-Lite-AE-Windows-CUDA-Test and extract it.
+5. Close After Effects. Back up the installed CPU AEX outside the Plug-ins folder.
+   Replace it with this Cineverse_Lite.aex. Keep only one installed copy.
+6. Open AE. Set project depth to 32 bpc. Project Settings > Video Rendering and
+   Effects > Mercury GPU Acceleration (CUDA). Preserve the documented unmanaged
+   RGB workflow: Working Space None, no Linearize Working Space, actual decoded
+   input profile selected. Do not add duplicate color conversions.
+7. Render a frame, then open the effect's About dialog. It should report CUDA
+   as the last completed render. CPU means this render used the fallback path.
+8. Compare the same composition, resolution, footage and settings with the CPU
+   backup. Purge caches before each comparison. Record first-frame time and a
+   multi-frame render time separately. Check stock and grain on/off separately.
+   Compare rendered images as well as time. Cached playback alone is not a test.
+
+The workflow installs CUDA on the build runner only. Customers do not need
+Python, CMD commands or the CUDA developer toolkit. Their NVIDIA driver must
+support CUDA 12.8. This source has not yet been compiled with nvcc or tested in
+native AE/CUDA on this development machine. GitHub has no GPU for a render test.
+If the workflow fails, copy the FIRST compiler error and its nearby lines.
+If it is green but slow, send the backend report and CPU/GPU render timings.
+
+Offline device licensing is paused until this performance test is verified.

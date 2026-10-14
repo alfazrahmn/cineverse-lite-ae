@@ -1,0 +1,23 @@
+{
+  "version": "0.2 Windows CUDA performance test source",
+  "target_host": "After Effects 26.2.1 Windows x64",
+  "sdk": "Owner-supplied Adobe SDK 26.5 Windows",
+  "offline_checks_passed": 175,
+  "offline_checks_failed": 0,
+  "maximum_port_vs_reference_absolute_error": 0.0,
+  "native_windows_compiled": false,
+  "native_after_effects_executed": false,
+  "nvcc_compiled": false,
+  "gpu_executed": false,
+  "github_workflow_executed": false,
+  "production_ready": false,
+  "known_limits": [
+    "Manual unmanaged RGB colour workflow only",
+    "Retained negative/display approximations",
+    "Separate CPU and CUDA test build workflows; native CUDA build not yet verified",
+    "CUDA backend requires native compilation and GPU validation",
+    "Preview grain is sampled at original-resolution coordinates, without full-resolution downfiltering",
+    "No macOS/Metal, Premiere or Windows ARM64 build"
+  ],
+  "source_sha256": "afa9ae05e88468a7db5cf6bc3ba054e9978bedd5456997325b6e23720947720a"
+}

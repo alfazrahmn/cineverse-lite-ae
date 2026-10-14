@@ -1,0 +1,91 @@
+Cineverse Lite AE 0.1 development notes
+
+Architecture:
+  src/Engine.cpp + Core.generated.hpp: host-independent float32 CPU processing.
+  src/CineverseLite.cpp: AE parameters, SmartFX, 8/16/32-bpc iteration and CUDA dispatch.
+  src/CineverseLiteCUDA.cu: single-pass GPU_BGRA128 rendering on AE's context/queue.
+  src/Settings.generated.hpp: fixed per-invocation settings, no global UI state.
+  src/PluginFlags.h: one shared PiPL/runtime flag definition.
+
+All render state is local/immutable. Constants are read-only. Pre-render settings
+are checked in on both success and failure; checked-out pixels/suites use RAII.
+Alpha is preserved. RGB is unassociated before colour operations and reassociated
+afterward. Zero-alpha RGB and exact passthrough are preserved. 32-bit over-range
+values are not forced into 0..1 by the adapter. 8-bit and AE's 0..32768 16-bit
+outputs are quantized/clamped. Cropped source/destination origins and row pitches
+are independent. Channel-only requests still check out full ARGB input.
+
+Exposure gain and white-balance source/target whites are prepared once per frame.
+Grain time is derived from AE effect time / local frame step; it is deterministic
+for repeated requests at that time. It is not necessarily the same frame index
+as Resolve when source offsets/time remapping differ. Preview grain positions
+use inverse downsample factors. This initial sampling is not an antialiased
+full-resolution grain downsample and may need an LOD/filtering extension.
+
+The effect advertises SmartFX, float, deep colour and thread-safe rendering.
+Dynamic flags clear NON_PARAM_VARY when grain is inactive, retaining normal
+static-frame caching. When grain is active, time dependence is explicitly set.
+No sequence_data or mutable cached UI globals are used.
+
+GPU:
+  CUDA only in this package; other frameworks are rejected at device setup.
+  No temporary pixel worlds or per-frame stock-data uploads.
+  63,776 bytes of core constants; CUDA constant-space limit is checked by nvcc
+  during the developer build. No additional global constant tables are added.
+  The host CUDA context is pushed/popped around dispatch. The supplied stream is
+  synchronized before input pixel check-in, so resources remain valid until the
+  kernel completes. This favours predictable ownership/error handling; profile
+  its cost on real AE MFR workloads before optimizing asynchronous completion.
+  CUDA arithmetic uses fmad=false, ftz=false and precise division/square root.
+  CPU/GPU parity still requires real CUDA compilation and execution.
+
+  Adobe SDK 26.5 headers declare PF_CUDAVersion 12080. The configuration targets
+  CUDA 12.8 and rejects lower driver versions. Toolkit/MSVC compatibility must
+  be tested on the native developer build; no unsupported-compiler override.
+  The static runtime is linked into the native plug-in. Customers need a
+  compatible NVIDIA driver, not the CUDA developer toolkit.
+
+Rebuild generated files:
+  python tools/generate_core.py
+  The source identity is recorded in PORT_MANIFEST.json. The generator keeps
+  constants and source algorithms, replacing only host interfaces, frame/position
+  inputs and precomputed exposure/WB data. Original MIT notice is retained.
+
+Offline tests (Linux, g++ and Python with NumPy):
+  python tests/validate_engine.py
+  python tests/validate_sdk.py --sdk /path/to/extracted/AfterEffectsSDK_26.5_win
+  python tests/validate_cuda_mapping.py
+
+The SDK test maps Microsoft's strncpy_s to an offline CRT shim. Adobe structures
+and suites come from the owner's actual SDK, not invented replacement headers.
+The CUDA-body test strips CUDA execution qualifiers and simulates thread indices;
+it proves layout/colour-body consistency only, not CUDA compiler/GPU correctness.
+
+Windows build:
+  tools/BuildWindows.ps1 -Backend CPU -SdkArchive /path/to/AfterEffectsSDK_26.5_win.zip
+  or windows/CineverseLite.sln with AE_SDK_ROOT pointing at the extracted SDK root.
+  The builder first runs the simulated-host tests with MSVC, then builds the DLL
+  and PiPL. The CPU and CUDA output/intermediate directories are separated.
+  Runtime MSVC is /MT, so the project does not depend on installing its own
+  VC runtime alongside the effect. No automatic installation or replacement is done.
+
+API compatibility target:
+  AE 26.2.1 Windows x64, compiled from SDK 26.5 with older SmartFX/GPU suites.
+  Uses PluginDataEntryFunction2 rather than newer 26.5 preview/entry APIs.
+  This is a compatibility intention, not a verified minimum supported release.
+  Premiere, macOS/Metal and Windows ARM64 are not targets of this project.
+
+Release gates:
+  Build/load in AE; managed/unmanaged colour contract; alpha/ROI/downsample
+  correctness; temporal/cache invalidation; CPU/CUDA numeric comparisons;
+  concurrent MFR/instances; exports; save/reopen; GPU initialization failure;
+  performance measurement; distribution/signing/installer verification.
+
+Documentation sources:
+  https://developer.adobe.com/after-effects/
+  https://ae-plugins.docsforadobe.dev/intro/gpu-build-instructions/
+  https://ae-plugins.docsforadobe.dev/smartfx/smartfx/
+  https://ae-plugins.docsforadobe.dev/effect-details/multi-frame-rendering-in-ae/
+  https://helpx.adobe.com/after-effects/desktop/adjust-colors/color-management/color-management.html
+  https://github.com/actions/checkout
+  https://github.com/actions/upload-artifact
