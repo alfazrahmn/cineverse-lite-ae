@@ -1,0 +1,27 @@
+name: Build Cineverse Lite CUDA Test
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Prepare pinned NVIDIA CUDA compiler
+        shell: powershell
+        run: ./tools/PrepareCuda.ps1
+
+      - name: Build CUDA plug-in
+        shell: powershell
+        run: ./tools/BuildWindows.ps1 -Backend CUDA -ToolsetVersion 14.29 -SdkArchive ./AfterEffectsSDK_26.5_win.zip
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: Cineverse-Lite-AE-Windows-CUDA-Test
+          path: dist/CUDA/Cineverse_Lite.aex
+          if-no-files-found: error
